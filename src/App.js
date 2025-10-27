@@ -2,7 +2,39 @@ import { MissionUtils } from "@woowacourse/mission-utils";
 
 class App {
   async run() {
-    //runRaceRound(cars, () => MissionUtils.Random.pickNumberInRange(0, 9));
+    try {
+      // 1. 자동차 이름 입력
+      const rawNames = await MissionUtils.Console.readLineAsync(
+        "경주할 자동차 이름을 입력하세요.(이름은 쉼표(,) 기준으로 구분)\n"
+      );
+      const names = splitByCommaClean(rawNames);
+      validateCarNames(names);
+
+      // 자동차 객체 생성
+      const cars = names.map((name) => ({ name, position: 0 }));
+
+      // 2. 시도 횟수 입력
+      const tryCountInput =
+        await MissionUtils.Console.readLineAsync(
+          "시도할 횟수는 몇 회인가요?\n"
+        );
+      const tryCount = validateTryCount(tryCountInput);
+
+      MissionUtils.Console.print("\n실행 결과");
+
+      // 3. 라운드 진행
+      for (let i = 0; i < tryCount; i++) {
+        runRaceRound(cars, () => MissionUtils.Random.pickNumberInRange(0, 9));
+        printRoundResult(cars); // 🔹 별도 함수 호출로 Indent 2 유지
+      }
+
+      // 4. 최종 우승자 출력
+      const winners = getWinners(cars);
+      MissionUtils.Console.print(`최종 우승자 : ${winners.join(", ")}`);
+    } catch (error) {
+      MissionUtils.Console.print(error.message);
+      throw error;
+    }
   }
 }
 
