@@ -2,7 +2,7 @@ import { MissionUtils } from "@woowacourse/mission-utils";
 
 class App {
   async run() {
-    runRaceRound(cars, () => MissionUtils.Random.pickNumberInRange(0, 9));
+    //runRaceRound(cars, () => MissionUtils.Random.pickNumberInRange(0, 9));
   }
 }
 
@@ -28,7 +28,7 @@ export function validateTryCount(input) {
   return count;
 }
 
-//4.
+//4. 라운드 진행
 export function runRaceRound(cars, randomPickFn) {
   cars.forEach((car) => {
     const number = randomPickFn();
@@ -36,6 +36,20 @@ export function runRaceRound(cars, randomPickFn) {
       car.position += 1;
     }
   });
+}
+
+//* 라운드 결과 출력 (indent 줄일려고 추가 신설)
+export function printRoundResult(cars) {
+  cars.forEach((car) => {
+    MissionUtils.Console.print(`${car.name} : ${"-".repeat(car.position)}`);
+  });
+  MissionUtils.Console.print(""); // 라운드 구분용 빈 줄
+}
+
+//5. 우승자 선별
+export function getWinners(cars) {
+  const max = Math.max(...cars.map((car) => car.position));
+  return cars.filter((car) => car.position === max).map((car) => car.name);
 }
 
 export default App;
