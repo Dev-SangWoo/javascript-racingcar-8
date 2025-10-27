@@ -1,5 +1,9 @@
+import { MissionUtils } from "@woowacourse/mission-utils";
+
 class App {
-  async run() {}
+  async run() {
+    runRaceRound(cars, () => MissionUtils.Random.pickNumberInRange(0, 9));
+  }
 }
 
 //1. , 구분자로 자르기
@@ -22,6 +26,16 @@ export function validateTryCount(input) {
     throw new Error("[ERROR] 시도 횟수는 1 이상의 숫자여야 합니다.");
   }
   return count;
+}
+
+//4.
+export function runRaceRound(cars, randomPickFn) {
+  cars.forEach((car) => {
+    const number = randomPickFn();
+    if (number >= 4) {
+      car.position += 1;
+    }
+  });
 }
 
 export default App;
